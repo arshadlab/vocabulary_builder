@@ -1,0 +1,7 @@
+PyPDF2
+regex
+requests
+bs4
+argparse
+urllib3
+nltk
