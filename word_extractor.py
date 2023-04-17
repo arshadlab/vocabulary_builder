@@ -172,8 +172,9 @@ def main(args=None):
 
     final_list = getFinalList(word_lst, arg_list.threshold)
 
-    # Define the initial HTML content as an empty string
-    html_content = f"<h1>Source: {arg_list.source}</h1>"
+    # Define the initial HTML content
+    html_content = "<html><head></head><body>"
+    html_content += f"<h1>Source: {arg_list.source}</h1>"
   
     count = 1
     for word in final_list:
@@ -192,7 +193,7 @@ def main(args=None):
             html_content += "<br></br></ul>"
         html_content += f"<a href='https://www.google.com/search?tbm=isch&q={word}'> Image search </a></ul>"
         count += 1
-
+    html_content += "</body></html>"
     # Write the HTML content to a new file
     with open(arg_list.output + ".html", "w") as f:
         f.write(html_content)
