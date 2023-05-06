@@ -59,6 +59,9 @@ $ python3 ./word\_extractor.py  -s meet\_joe\_black.srt -o meet\_joe\_black
 $ python3 ./word\_extractor.py  -s paper.pdf -o paper  
 $ python3 ./word\_extractor.py  -s "URL" -o url
 
+Extract word list from all srt files in a directory
+$ find <dir>/*.srt | xargs -i{} ./word_extractor.py -s {} -o $(basename -s .srt {})
+
 Outputs:
 HTML and text files are created
 
