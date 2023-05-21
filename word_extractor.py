@@ -20,7 +20,7 @@ Examples:
 
 author: <arshadm78 @ yahoo.com>
 """
-
+import os
 import PyPDF2
 import re
 import requests
@@ -29,12 +29,10 @@ import argparse
 from urllib.parse import urlparse
 import nltk
 
-nltk.download("stopwords")
-# nltk.download('punkt')
-nltk.download("wordnet")
-nltk.download("words")
+nltk.download("stopwords", quiet=True, raise_on_error=True)
+nltk.download("wordnet", quiet=True, raise_on_error=True)
+nltk.download("words", quiet=True, raise_on_error=True)
 from nltk.corpus import stopwords, words
-from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 
@@ -103,10 +101,10 @@ def gettext(file):
 
 def getFinalList(text_list, min_length=3):
     wordnet_tag = ["n", "s", "a", "r", "v"]
-    
+ 
     # initialize a null list
     unique_list = []
-    with open("excluded_word.txt", "r") as f_object:
+    with open(os.path.join( os.path.dirname(os.path.realpath(__file__)) ,"excluded_word.txt"), "r") as f_object:
         common_words = f_object.read().split()
         
     stop_words = set(stopwords.words("english"))
@@ -120,7 +118,7 @@ def getFinalList(text_list, min_length=3):
         for t in wordnet_tag:
             lem1 = wnl.lemmatize(x, t)
             # Use shortest form
-            if len(lem1) < len(x):
+            if lem1 != x:
                 lem = lem1
 
         # check if exists in unique_list or not
@@ -139,13 +137,6 @@ def getFinalList(text_list, min_length=3):
 def main(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-m",
-        "--mode",
-        help="Input source type. text, pdf or url",
-        required=False,
-        type=str,
-    )
-    parser.add_argument(
         "-s", "--source", help="Input source. text, pdf or url", required=True, type=str
     )
     parser.add_argument(
@@ -154,14 +145,14 @@ def main(args=None):
     parser.add_argument(
         "-o",
         "--output",
-        help="Output file base name",
+        help="Output files base name",
         default="result",
         required=False,
         type=str,
     )
     
     arg_list = parser.parse_args()
-    
+    print(f"Processing...")
     word_lst = []
     if uri_validator(arg_list.source):
         word_lst = gettextfromurl(arg_list.source)
